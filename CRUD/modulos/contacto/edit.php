@@ -1,55 +1,54 @@
 <?php
-
-include("../../conexion.php");
-if(isset($_GET['ID'])){
-    $txtid-(isset($_GET['ID'])?$_GET['ID']:"");
-    $stm-$conexion->prepare("SELECT * FROM contactos WHERE: id=:txid");
-    $stm->bindparam(":txtid",$txtid);
-    $stm->execute();
-    $registro-$stm->fetch(PDO::FETCH_LAZY);
-    $nombre=$registro['nombre'];
-    $telefono=$registro['telefono'];
-    $fecha=$registro['fecha'];
-}
-
-if($_POST){
-    $txtid=(isset($_POST['txtid'])?$_POST['txtid']:"");
-    $nombre=(isset($_POST['nombre'])?$_POST['nombre']:"");
-    $nombre=(isset($_POST['telefono'])?$_POST['telefono']:"");
-    $nombre=(isset($_POST['fecha'])?$_POST['fecha']:"");
-
-    $stm=$conexion->prepare("UPDATE contactos SET(nombre=:nombre,telefono=:telefono,fecha=;fecha WHERE id=:txting)");
-    $stm->bindParam(":nombre",$nombre);
-    $stm->bindParam(":telefono",$telefono);
-    $stm->bindParam(":fecha",$fecha);
-    $stm->bindParam(":txtid",$txtid);
-    $stm->execute();
-
-    header("location:index.php");
-}
-
-
+    include("conexion.php");
 ?>
-<?php include("../../template/header.php"); ?>
 
-<form action="" method="post">
+<html>
+<head>
+    <title>Editar</title>
+</head>
+<body>
+    <?php
+        if(isset($_POST['enviar'])){
 
-      <input type="hidden" class="form-control" name="txtid" value="<?php echo $txtid; ?>" placeholder="Ingresa nombre">
+            $Id=$_POST['Id'];
+            $Nombre=$_POST['Nombre'];
+            $Nomaterias=$_POST['Nomaterias'];
 
-      <input type="text" class="form-control" name="Nombre" value="<?php echo $nombre; ?>" placeholder="Ingresa nombre">
-        <label for="Nombre"></label>
+            $sql="update alumnos set nombre='".$Nombre."',Nomaterias='".$nomaterias."' where Id='".$Id."'";
+            $resultado=mysqli_query($conexion,$sql);
 
-        <label for="Telefono"></label>
-        <input type="text" class="form-control" name="Telefono" value="<?php echo $telefono; ?>" placeholder="Ingresa telefono">
+            if($resultado){
+                echo "<script language='JavaScript'>alert('Los datos se actualizaron correctamente'); location.assign('index.php');</script>";
+            }else{
+                "<script language='JavaScript'>alert('ERROR:Los datos no se actualizaron correctamente a la base de datos'); location.assign('index.php');</script>";
+                mysqli_close($conexion);
+            }
 
-        <label for="Fecha"></label>
-        <input type="date" class="form-control" name="Fecha" value="<?php echo $fecha; ?>" placeholder="Ingresa la fecha">
-      </div>
-      <div class="modal-footer">
-        <a href="index.php"> class="btn btn.danger">cancelar</a>
-        <button type="submit" class="btn btn-primary">Actualizar</button>
-      </div>
-</form>
+        }else{
+            $id=$_GET['id'];
+            $sql="select * from alumnos where id='".$id."'";
+            $resultado=mysqli_query($conexion,$sql);
 
-<?php include("../../template/footer.php"); ?>
+            $fila=mysqli_fetch_assoc($resultado);
+            $Nombre=$fila["Nombre"];
+            $Nomaterias=$fila["Nomaterias"];
 
+            mysqli_close($conexion);
+    ?>
+    <h1>Editar Alumno</h1>
+    <form action="<?=$_SERVER['PHP_SELF']?>" method="post">
+        <label>Nombre:</label>
+        <input type="text" name="Nombre" value="<?php echo $Nombre; ?>"><br>
+
+        <label>Nomaterias</label>
+        <input type="text" name="Nomaterias" value="<?php echo $Nomaterias; ?>"><br>
+
+        <input type="hidden" name="id" value="<?php echo $id; ?>">
+        <input type="submit" name="Enviar" value="Actualizar">
+        <a href="index.php">Regresar</a>
+    </form>
+    <?php
+    }
+    ?>
+</body>
+</html>
