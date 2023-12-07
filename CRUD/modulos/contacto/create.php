@@ -1,47 +1,41 @@
-<?php 
+<html>
+<head>
+    <title>Agregar</title>
+</head>
+<body>
+    <?php
+        if(isset($_POST['enviar'])){
+            $Nombre=$_POST['Nombre'];
+            $Nomaterias=$_POST['Nomaterias'];
+            
 
-if($_POST){
-    $nombre=(isset($_POST['nombre'])?$_POST['nombre']:"");
-    $nombre=(isset($_POST['telefono'])?$_POST['telefono']:"");
-    $nombre=(isset($_POST['fecha'])?$_POST['fecha']:"");
+            include("conexion.php");
+            $sql="insert into alumnos(Nombre,Nomaterias) values('".$Nombre."','".$Nomaterias."')";
+            $resultado=mysqli_query($conexion,$sql);
 
-    $stm=$conexion->prepare("INSERT INTO contactos(,id,nombre,telefono,fecha VALUES(NULL,:nombre,:telefono,:fecha)");
-    $stm->bindParam(":nombre",$nombre);
-    $stm->bindParam(":telefono",$telefono);
-    $stm->bindParam(":fecha",$fecha);
-    $stm->execute();
+            if($resultado){
+                echo "<script language='JavaScript'>alert('Los datos fueron ingresados correctamente a la base de datos'); location.assign('index.php');</script>";
+            } else{
+                echo "<script language='JavaScript'>alert('ERROR:Los datos no fueron ingresados correctamente a la base de datos'); location.assign('index.php');</script>";
+            }
+            mysqli_close($conexion);
 
-    header("location:index.php");
-}
+        }else{
+      ?>
 
-?>
-
-
-<!-- Modal create -->
-<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">AGREGAR CONTACTO</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="" method="post"></form>
-      <div class="modal-body">
-        <label for="Nombre"></label>
-        <input type="text" class="form-control" name="Nombre" value="" placeholder="Ingresa nombre">
-
-        <label for="Telefono"></label>
-        <input type="text" class="form-control" name="Telefono" value="" placeholder="Ingresa telefono">
-
-        <label for="Fecha"></label>
-        <input type="date" class="form-control" name="Fecha" value="" placeholder="Ingresa la fecha">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-      </div>
-    </div>
-  </div>
-</div>
+    <h1>Nuevo Alumno</h1>
+    <form action="<?=$_SERVER['PHP_SELF']?>" method="post">
+        <label>Nombre:</label>
+        <input type="text" name="Nombre"><br>
+        <br>
+        <label>No.Materias:</label>
+        <input type="text" name="No.Materias"><br>
+        <br>
+        <input type="submit" name="enviar" value="Agregar">
+        <a href="index.php">Regresar</a>
+    </form>
+    <?php
+    }
+    ?>
+</body>
+</html>
