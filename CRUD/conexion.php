@@ -1,15 +1,11 @@
 
-<?php
-$servidor="localhost";
-$db="crud";
-$username="root";
-$password="";
+<?php 
+$dbname="escuela";
+$dbuser="root";
+$dbhost="localhost";
+$dbpass="";
 
-try{
-    $conexion=new PDO("mysql:host=$servidor;bdname=$db",$username,$password);
+$conexion=mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
 
-}catch(Exception $e){
-    echo $e->getMessage();
 
-}
 ?>
