@@ -1,7 +1,7 @@
 
 <?php
 $servidor="localhost";
-$db="phpcrud";
+$db="crud";
 $username="root";
 $password="";
 
