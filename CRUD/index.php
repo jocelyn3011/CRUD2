@@ -1,38 +1,48 @@
+<html>
+<head>
+    <title>Registro de Alumnos</title>
+</head>
+<body> 
 
-<?php include("template/header.php"); ?>
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Nuevo
-</button>
-
-       <div class="p-5 mb-4 bg-light rounded-3">
-       <div class="table-responsive">
-    <table class="table">
-        <thead class="table table-dark">
+<?php 
+    include("conexion.php");
+    $sql="select * from alumnos ";
+    $resultado=mysqli_query($conexion,$sql);
+?>
+<center>
+    <h1 class="text-center" style="background-color:black; color:white">Registro de Alumnos</h1>
+</center>
+    <a href="agregar.php">Nuevo Alumno</a><br><br>
+    <table>
+        <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Telefono</th>
-                <th>Fecha</th>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Nomaterias</th>
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tr class="">
-                <td scope="row">29833</td>
-                <td scope="row">Jos</td>
-                <td scope="row">2102</td>
-                <td scope="row">1312|1</td>
-                <td>
-                <a href="editar.php?id=<?php echo $contacto['ID'];?>" class="btn btn-success">Editar</a>
-                <a href="index.php?id=<?php echo $contacto['ID'];?>" class="btn btn-danger">Eliminar</a>
+    <tbody>
+        <?php
+            while($filas=mysqli_fetch_assoc($resultado)){
+        ?>
+        <tr>
+            <td><?php echo $filas['id']?></td>
+            <td><?php echo $filas['Nombre']?></td>
+            <td><?php echo $filas['Nomaterias']?></td>
+            <td>
+                <?php echo "<a href='editar.php?Id=".$filas['id']."'>Editar</a>"; ?>
+                <?php echo "<a href='eliminar.php?Id=".$filas['id']."'>Eliminar</a>"; ?>
+            </td>
+        </tr>
+        <?php
+         }
+        ?>
+    </tbody>
+    </table>
+    <?php
+        mysqli_close($conexion);
+    ?>
 
-
-                </td>
-            
-            </tr>
-         
-        </div>
-       </div>
-
-<?php include("template/footer.php"); ?>
-   
+</body>
+</html>
